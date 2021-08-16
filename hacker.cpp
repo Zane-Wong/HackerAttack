@@ -1,6 +1,7 @@
+#include <Windows.h>
+#include <hacker.h>
 #include <iostream>
 #include <string>
-#include <Windows.h>
 #define WIDTH 40
 #define HEIGHT 15
 using namespace std;
@@ -18,15 +19,15 @@ void login(){
 		char a[64]={0},b[64]={0};
 		gets(a);//gets(a);清空缓冲区
 		if(*a!=0){
-			cout<<"输入的内容包含空白字符！"<<endl
-				<<"默认保留首个非空字符串"<<endl;
+			cout<<"您输入了空白字符！"<<endl
+				<<"空白字符及其后内容将被舍弃"<<endl;
 		}
 		cout<<"输入密码："<<endl;
 		cin>>pwd;
 		gets(b);//gets(b);清空缓冲区
 		if(*b!=0){
-			cout<<"输入的内容包含空白字符！"<<endl
-				<<"默认保留首个非空字符串"<<endl;
+			cout<<"您输入了空白字符！"<<endl
+				<<"空白字符及其后内容将被舍弃"<<endl;
 		}
 		if(name=="hacker"&&pwd=="123456"){
 			cout<<"Welcome back, "<<name<<endl;
@@ -86,8 +87,62 @@ int menuChoose(){
 }
 void initWindow(){
 	char command[128];
-	sprintf(command,"mode con cols=%d lines=%d",WIDTH,HEIGHT);
+	sprintf_s(command,"mode con cols=%d lines=%d",WIDTH,HEIGHT);
 	system(command);//设置终端大小
+}
+void attack404(){
+	char id[64];//网站的ID
+	char response[MAXSIZE];//返回结果
+	string retStr="未执行";
+	printInMiddle("---网站404攻击---");
+	cout<<"输入要攻击的网站ID："<<endl;//2293944134
+	scanf_s("%s",id,sizeof(id));
+	cout<<"正在执行404攻击..."<<endl;
+	hk_404(id,response);//返回值respomse为UTF-8编码格式，VC++2010默认是GBK编码
+	retStr=UTF8ToGBK(response);//转换编码
+	cout<<retStr<<endl;
+}
+void falsifyAttack(){
+	string attackTEXT;
+	char id[64];
+	char response[MAXSIZE];
+	string retStr;
+	printInMiddle("---网站篡改攻击---");
+	cout<<"输入要攻击的网站ID："<<endl;
+	cin>>id;
+	cout<<"输入要修改的内容："<<endl;
+	cin>>attackTEXT;
+	GBKToUTF8(attackTEXT);//将输入的文本编码格式转化为UTF-8编码格式
+
+	//(char*)attackTEXT.c_str()将string类型强转为char*
+	hk_tamper(id,(char*)attackTEXT.c_str(),response);
+
+	retStr=UTF8ToGBK(response);
+	cout<<retStr<<endl;
+}
+void attackRepair(){
+	char id[64];
+	char response[MAXSIZE];
+	string retStr;
+	printInMiddle("---网站攻击修复---");
+	cout<<"输入要修复的网站ID："<<endl;
+	scanf_s("%s",id,sizeof(id));
+	cout<<"正在执行网站攻击修复..."<<endl;
+	hk_restore(id,response);
+	retStr=UTF8ToGBK(response);
+	cout<<retStr<<endl;
+}
+void attackRecord(){
+	char id[64];
+	char response[MAXSIZE];
+	string retStr;
+	printInMiddle("---查看攻击记录---");
+	cout<<"输入要攻击的网站ID："<<endl;
+	cin>>id;
+	cout<<"正在执行攻击记录查询..."<<endl;
+	hk_record(id, response);
+	retStr=UTF8ToGBK(response);
+	cout<<retStr<<endl;
 }
 int main()
 {
@@ -99,16 +154,16 @@ int main()
 		system("cls");
 		switch(op){
 		case 1:
-			printInMiddle("该功能正在开发中，敬请期待！");
+			attack404();
 			break;
 		case 2:
-			printInMiddle("该功能正在开发中，敬请期待！");
+			falsifyAttack();//篡改攻击
 			break;
 		case 3:
-			printInMiddle("该功能正在开发中，敬请期待！");
+			attackRecord();//攻击记录
 			break;
 		case 4:
-			printInMiddle("该功能正在开发中，敬请期待！");
+			attackRepair();//攻击修复
 			break;
 		case 5:
 			return 0;
