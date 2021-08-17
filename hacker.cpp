@@ -2,6 +2,7 @@
 #include <hacker.h>
 #include <iostream>
 #include <string>
+#include <conio.h>
 #define WIDTH 40
 #define HEIGHT 15
 using namespace std;
@@ -11,8 +12,26 @@ void printInMiddle(string str){
 	}
 	cout<<str<<endl;
 }
+void inputPwd(char pwd[],int size){
+	char c;
+	int i=0;
+	while(1){
+		c=getch();
+		if(c!='\r'/*&&c!=' '*/){//字符非空格或回车则保存到pwd中
+			pwd[i++]=c;
+			cout<<"*";
+		}
+		else{
+			pwd[i]='\0';
+			break;
+		}
+	}
+	cout<<endl;
+	return;
+}
 void login(){
-	string name,pwd;
+	string name;
+	char pwd[64];
 	while(true){
 		cout<<"输入账号："<<endl;
 		cin>>name;
@@ -23,13 +42,15 @@ void login(){
 				<<"空白字符及其后内容将被舍弃"<<endl;
 		}
 		cout<<"输入密码："<<endl;
-		cin>>pwd;
-		gets(b);//gets(b);清空缓冲区
-		if(*b!=0){
-			cout<<"您输入了空白字符！"<<endl
-				<<"空白字符及其后内容将被舍弃"<<endl;
-		}
-		if(name=="hacker"&&pwd=="123456"){
+		//cin>>pwd;
+		inputPwd(pwd,64);
+		//gets(b);//gets(b);清空缓冲区
+		//if(*b!=0){
+		//	cout<<"您输入了空白字符！"<<endl
+		//		<<"空白字符及其后内容将被舍弃"<<endl;
+		//}
+		//if(name=="hacker"&&pwd=="123456"){
+		if(name=="hacker"&&strcmp("123456",pwd)==0){
 			cout<<"Welcome back, "<<name<<endl;
 			system("pause");
 			system("cls");
